@@ -1,14 +1,29 @@
-
 import { useState, useEffect } from "react";
-import { Shield, Clock, CheckCircle } from "lucide-react";
+import { Shield, Clock, CheckCircle, X, Copy } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 const Index = () => {
   const [timeLeft, setTimeLeft] = useState<string>("10:00");
   const [isExtraServiceSelected, setIsExtraServiceSelected] = useState(false);
+  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
   const basePrice = 497.00;
   const extraServicePrice = 9.99;
+  const pixCode = "00020126870014brgov.bcb.pix565pix.pnmep";
 
   const totalPrice = isExtraServiceSelected ? basePrice + extraServicePrice : basePrice;
+
+  const handleCopyPixCode = async () => {
+    try {
+      await navigator.clipboard.writeText(pixCode);
+    } catch (err) {
+      console.error('Failed to copy text: ', err);
+    }
+  };
 
   useEffect(() => {
     // Converter 10 minutos para segundos
@@ -147,9 +162,66 @@ const Index = () => {
         </div>
 
         {/* Checkout Button */}
-        <button className="checkout-button">
+        <button 
+          className="checkout-button"
+          onClick={() => setIsPaymentModalOpen(true)}
+        >
           Gerar R$ {totalPrice.toFixed(2)}
         </button>
+
+        {/* Payment Modal */}
+        <Dialog open={isPaymentModalOpen} onOpenChange={setIsPaymentModalOpen}>
+          <DialogContent className="w-full max-w-md p-6">
+            <DialogHeader>
+              <DialogTitle className="text-center font-semibold text-lg">
+                QR Code PIX
+              </DialogTitle>
+              <button
+                onClick={() => setIsPaymentModalOpen(false)}
+                className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground"
+              >
+                <X className="h-4 w-4" />
+                <span className="sr-only">Close</span>
+              </button>
+            </DialogHeader>
+
+            <div className="flex flex-col items-center space-y-6">
+              {/* QR Code Image */}
+              <img 
+                src="/lovable-uploads/ac096a21-1c1d-49d6-b8a9-2d605c2b5ae6.png"
+                alt="QR Code PIX"
+                className="w-48 h-48"
+              />
+
+              {/* PIX Code Section */}
+              <div className="w-full space-y-2">
+                <p className="text-sm text-center text-gray-600">
+                  Copie o código PIX abaixo:
+                </p>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={pixCode}
+                    readOnly
+                    className="flex-1 px-3 py-2 border rounded-lg bg-gray-50 text-sm"
+                  />
+                  <button
+                    onClick={handleCopyPixCode}
+                    className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors flex items-center gap-2"
+                  >
+                    <Copy className="h-4 w-4" />
+                    Copiar
+                  </button>
+                </div>
+              </div>
+
+              {/* Total Price */}
+              <div className="w-full text-center border-t pt-4">
+                <p className="font-semibold">Total: R$ {totalPrice.toFixed(2)}</p>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );
