@@ -4,6 +4,11 @@ import { Shield, Clock, CheckCircle } from "lucide-react";
 
 const Index = () => {
   const [timeLeft] = useState("04:16");
+  const [isExtraServiceSelected, setIsExtraServiceSelected] = useState(false);
+  const basePrice = 497.00;
+  const extraServicePrice = 9.99;
+
+  const totalPrice = isExtraServiceSelected ? basePrice + extraServicePrice : basePrice;
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -44,7 +49,7 @@ const Index = () => {
               <h3 className="text-purple-600 font-semibold text-lg">
                 30.000 Seguidores + Bônus 🎁
               </h3>
-              <p className="text-green-500 font-bold text-xl">R$ 497,00</p>
+              <p className="text-green-500 font-bold text-xl">R$ {basePrice.toFixed(2)}</p>
               <p className="text-gray-600 text-sm mt-2">
                 30.000 Seguidores + 🎁 Bônus de 20.000 Curtidas + 20.000 Visualizações
               </p>
@@ -81,7 +86,7 @@ const Index = () => {
 
         {/* Bonus Offer */}
         <div className="bg-white rounded-lg p-6 mb-6">
-          <div className="flex items-start gap-4">
+          <div className="flex flex-col md:flex-row items-start gap-4">
             <img 
               src="/placeholder.svg"
               alt="Instagram Features" 
@@ -90,19 +95,31 @@ const Index = () => {
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-2">
                 <span className="text-pink-500">🎯</span>
-                <span className="font-semibold">Garanta seu lugar no topo!</span>
+                <span className="font-semibold">Método Exclusivo de Crescimento</span>
                 <span className="text-pink-500">🎯</span>
               </div>
-              <p className="text-sm text-gray-600 mb-4">
-                Usando nossos métodos exclusivos de Inteligência Artificial, vamos impulsionar seu perfil direto para o Explorar por 24 horas! 🔥 ✅ Automação estratégica para aumentar seu alcance ✅ Engajamento real para atrair mais seguidores ✅ Resultados rápidos e eficazes ⚡ Vagas limitadas! (enquanto o cronômetro estiver valendo)
+              <p className="text-sm text-gray-600 mb-4 leading-relaxed">
+                Impulsione seu perfil para o Explorar usando nossa tecnologia de IA! 
+                Em apenas 24 horas, você receberá:
+                • Alcance orgânico multiplicado
+                • Engajamento real e direcionado
+                • Visibilidade garantida na seção Explorar
+                • Análise personalizada do seu perfil
               </p>
               <div className="flex items-center justify-between">
                 <div>
-                  <span className="text-gray-400 line-through">R$ 9,99</span>
-                  <span className="text-green-500 font-bold ml-2">R$ 9,99</span>
+                  <span className="text-gray-400 line-through">R$ 19,99</span>
+                  <span className="text-green-500 font-bold ml-2">R$ {extraServicePrice}</span>
                 </div>
-                <button className="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 transition-colors">
-                  Adicionar
+                <button 
+                  onClick={() => setIsExtraServiceSelected(!isExtraServiceSelected)}
+                  className={`px-6 py-2 rounded-lg transition-colors ${
+                    isExtraServiceSelected 
+                    ? 'bg-green-500 text-white hover:bg-green-600' 
+                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                  }`}
+                >
+                  {isExtraServiceSelected ? 'Adicionado' : 'Adicionar'}
                 </button>
               </div>
             </div>
@@ -111,7 +128,7 @@ const Index = () => {
 
         {/* Checkout Button */}
         <button className="checkout-button">
-          Gerar R$ 497,00
+          Gerar R$ {totalPrice.toFixed(2)}
         </button>
       </div>
     </div>
