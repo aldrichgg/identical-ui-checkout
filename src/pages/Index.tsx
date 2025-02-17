@@ -1,14 +1,33 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Shield, Clock, CheckCircle } from "lucide-react";
 
 const Index = () => {
-  const [timeLeft] = useState("04:16");
+  const [timeLeft, setTimeLeft] = useState<string>("10:00");
   const [isExtraServiceSelected, setIsExtraServiceSelected] = useState(false);
   const basePrice = 497.00;
   const extraServicePrice = 9.99;
 
   const totalPrice = isExtraServiceSelected ? basePrice + extraServicePrice : basePrice;
+
+  useEffect(() => {
+    // Converter 10 minutos para segundos
+    let totalSeconds = 10 * 60;
+
+    const timer = setInterval(() => {
+      if (totalSeconds > 0) {
+        totalSeconds -= 1;
+        const minutes = Math.floor(totalSeconds / 60);
+        const seconds = totalSeconds % 60;
+        setTimeLeft(`${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`);
+      } else {
+        clearInterval(timer);
+      }
+    }, 1000);
+
+    // Limpar o intervalo quando o componente for desmontado
+    return () => clearInterval(timer);
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -137,4 +156,3 @@ const Index = () => {
 };
 
 export default Index;
-
