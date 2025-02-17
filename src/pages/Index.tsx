@@ -111,16 +111,17 @@ const Index = () => {
                   <span className="text-gray-400 line-through">R$ 19,99</span>
                   <span className="text-green-500 font-bold ml-2">R$ {extraServicePrice}</span>
                 </div>
-                <button 
-                  onClick={() => setIsExtraServiceSelected(!isExtraServiceSelected)}
-                  className={`px-6 py-2 rounded-lg transition-colors ${
-                    isExtraServiceSelected 
-                    ? 'bg-green-500 text-white hover:bg-green-600' 
-                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                  }`}
-                >
-                  {isExtraServiceSelected ? 'Adicionado' : 'Adicionar'}
-                </button>
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={isExtraServiceSelected}
+                    onChange={() => setIsExtraServiceSelected(!isExtraServiceSelected)}
+                    className="w-5 h-5 rounded border-gray-300 text-green-500 focus:ring-green-500"
+                  />
+                  <span className="text-gray-700">
+                    {isExtraServiceSelected ? 'Adicionado' : 'Adicionar'}
+                  </span>
+                </label>
               </div>
             </div>
           </div>
@@ -136,3 +137,4 @@ const Index = () => {
 };
 
 export default Index;
+
